@@ -1,14 +1,23 @@
 ## Programming Assignment 2
 ## 2014-08-24
 
-## Put comments here that give an overall description of what your
-## functions do
 
 ## This function creates a special "matrix" object that
 ## can cache its inverse.
 
 makeCacheMatrix <- function(x = matrix()) {
+    s <- NULL
+    set <- function(y) 
+    {
+      x <<- y
+      s <<- NULL
+      
+    }
 
+    get <- function() x
+    setInverse <- function(solve) s <<- solve
+    getInverse <- function() s
+    list(set = set, get = get, setInverse = setInverse, getInverse = getInverse)
 }
 
 
@@ -19,4 +28,24 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+    s <-x$getInverse();
+    if(!is.null(s))
+    {
+      message("Getting cached data")
+      return(s)      
+    }
+    data <- x$get()
+    s <- solve(data, ...)
+    x$setInverse(s)
+    s
 }
+
+mat = matrix( c(2,4,3,1), nrow=2, ncol=2)
+
+##solve(mat)
+matrixObject <- makeCacheMatrix(mat)
+##matrixObject$get()
+##matrixObject$getInverse()
+cacheSolve(matrixObject)
+##cacheSolve(matrixObject)
+
